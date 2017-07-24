@@ -20,8 +20,10 @@ void timer_init(){
 
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
-	TIM_TimeBaseStructure.TIM_Period = 32000;
-	TIM_TimeBaseStructure.TIM_Prescaler = 8;
+//	TIM_TimeBaseStructure.TIM_Period = 32000;
+//	TIM_TimeBaseStructure.TIM_Prescaler = 8;
+	TIM_TimeBaseStructure.TIM_Period = 2000;
+	TIM_TimeBaseStructure.TIM_Prescaler = 36000;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
