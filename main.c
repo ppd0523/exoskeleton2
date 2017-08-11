@@ -7,6 +7,7 @@
 #include "stm32f10x_usart.h"
 #include "adc-dma.h"
 #include "tim_pwm.h"
+#include "usart_servo.h"
 
 
 vu16 adcValue[4] = { };
@@ -18,18 +19,14 @@ unsigned char buf[21] = {
 
 unsigned char temp[7] = { 0, 0, 0, 0, 0, '\r', '\n' };
 
+/**
+ * receive from PC
+ */
 void USART1_IRQHandler(void) {
 	static uint16_t c;
 	if ((USART1->SR & USART_FLAG_RXNE) != (u16) RESET) {
 		c = USART_ReceiveData(USART1);
 		USART_SendData(USART1, c);
-		if ( c == 'a' ){
-			TIM3->CCR1 += 10;
-		}
-
-		if (c == 's' ){
-			TIM3->CCR1 -= 10;
-		}
 
 		if (c == 'd' ){
 			TIM3->CCR1 = 0;
@@ -39,6 +36,21 @@ void USART1_IRQHandler(void) {
 	}
 }
 
+/**
+ * receive parcket from Servo motor
+ */
+void USART3_IRQHandler(void) {
+	static char raw[30];
+	static int index = 0;
+	if ((USART3->SR & USART_FLAG_RXNE) != (u16) RESET){
+		raw[index++] = (char) 0xFF & USART_ReceiveData(USART3);
+	}
+
+}
+
+/**
+ * timer counter
+ */
 void TIM2_IRQHandler(void) {
 	TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
 	static uint8_t cnt;
@@ -51,6 +63,7 @@ void TIM2_IRQHandler(void) {
 
 int main(void) {
 	usart_init();
+	usart_servo_init();
 	gpio_init();
 	timer_init();
 	adc_init();

@@ -4,7 +4,7 @@
     <Device manufacturerId="9" manufacturerName="ST" chipId="313" chipName="STM32F103RE" boardId="" boardName=""/>
     <BuildOption>
       <Compile>
-        <Option name="OptimizationLevel" value="0"/>
+        <Option name="OptimizationLevel" value="1"/>
         <Option name="UseFPU" value="0"/>
         <Option name="UserEditCompiler" value=""/>
         <Option name="SupportCPlusplus" value="0"/>
@@ -25,6 +25,7 @@
         <Option name="nostartfiles" value="1"/>
         <Option name="LTO" value="0"/>
         <Option name="IsNewStartupCode" value="1"/>
+        <Option name="Library" value="Not use C Library"/>
         <LinkedLibraries/>
         <MemoryAreas debugInFlashNotRAM="1">
           <Memory name="IROM1" type="ReadOnly" size="0x00080000" startValue="0x08000000"/>
@@ -72,6 +73,9 @@
     <Component id="50" name="CMSIS core" path="" type="2"/>
     <Component id="440" name="RCC" path="" type="2"/>
     <Component id="444" name="GPIO" path="" type="2"/>
+    <Component id="446" name="DMA" path="" type="2"/>
+    <Component id="456" name="TIM" path="" type="2"/>
+    <Component id="457" name="ADC" path="" type="2"/>
     <Component id="458" name="USART" path="" type="2"/>
     <Component id="460" name="CMSIS Boot" path="" type="2"/>
     <Component id="467" name="MISC" path="" type="2"/>
@@ -79,30 +83,46 @@
   <Files>
     <File name="cmsis_boot/system_stm32f10x.c" path="cmsis_boot/system_stm32f10x.c" type="1"/>
     <File name="stm_lib/inc/misc.h" path="stm_lib/inc/misc.h" type="1"/>
+    <File name="stm_lib/user/adc-dma.h" path="stm_lib/user/adc-dma.h" type="1"/>
     <File name="cmsis/core_cmInstr.h" path="cmsis/core_cmInstr.h" type="1"/>
+    <File name="stm_lib/inc/stm32f10x_tim.h" path="stm_lib/inc/stm32f10x_tim.h" type="1"/>
     <File name="cmsis/core_cm3.h" path="cmsis/core_cm3.h" type="1"/>
     <File name="cmsis_boot" path="" type="2"/>
+    <File name="stm_lib/user/tim_timer.h" path="stm_lib/user/tim_timer.h" type="1"/>
     <File name="stm_lib/src/stm32f10x_rcc.c" path="stm_lib/src/stm32f10x_rcc.c" type="1"/>
+    <File name="stm_lib/src/stm32f10x_tim.c" path="stm_lib/src/stm32f10x_tim.c" type="1"/>
     <File name="cmsis_boot/startup" path="" type="2"/>
+    <File name="stm_lib/user/gpio_led.h" path="stm_lib/user/gpio_led.h" type="1"/>
     <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
-    <File name="cmsis_boot/startup/startup_stm32f10x_hd.c" path="cmsis_boot/startup/startup_stm32f10x_hd.c" type="1"/>
+    <File name="stm_lib/user/tim_pwm.c" path="stm_lib/user/tim_pwm.c" type="1"/>
     <File name="stm_lib/user" path="" type="2"/>
+    <File name="cmsis_boot/startup/startup_stm32f10x_hd.c" path="cmsis_boot/startup/startup_stm32f10x_hd.c" type="1"/>
     <File name="stm_lib/src/misc.c" path="stm_lib/src/misc.c" type="1"/>
     <File name="cmsis_boot/stm32f10x.h" path="cmsis_boot/stm32f10x.h" type="1"/>
     <File name="cmsis_boot/stm32f10x_conf.h" path="cmsis_boot/stm32f10x_conf.h" type="1"/>
+    <File name="stm_lib/src/stm32f10x_dma.c" path="stm_lib/src/stm32f10x_dma.c" type="1"/>
+    <File name="stm_lib/user/usart_servo.c" path="usart_servo.c" type="1"/>
     <File name="stm_lib/src" path="" type="2"/>
     <File name="cmsis" path="" type="2"/>
     <File name="stm_lib" path="" type="2"/>
     <File name="syscalls/syscalls.c" path="syscalls/syscalls.c" type="1"/>
+    <File name="stm_lib/inc/stm32f10x_dma.h" path="stm_lib/inc/stm32f10x_dma.h" type="1"/>
+    <File name="stm_lib/src/stm32f10x_adc.c" path="stm_lib/src/stm32f10x_adc.c" type="1"/>
+    <File name="stm_lib/inc/stm32f10x_adc.h" path="stm_lib/inc/stm32f10x_adc.h" type="1"/>
     <File name="cmsis_boot/system_stm32f10x.h" path="cmsis_boot/system_stm32f10x.h" type="1"/>
+    <File name="stm_lib/user/adc-dma.c" path="stm_lib/user/adc-dma.c" type="1"/>
     <File name="stm_lib/inc/stm32f10x_rcc.h" path="stm_lib/inc/stm32f10x_rcc.h" type="1"/>
     <File name="syscalls" path="" type="2"/>
+    <File name="stm_lib/user/tim_timer.c" path="stm_lib/user/tim_timer.c" type="1"/>
     <File name="stm_lib/src/stm32f10x_usart.c" path="stm_lib/src/stm32f10x_usart.c" type="1"/>
-    <File name="stm_lib/user/usart_rxtx.c" path="example/usart_rxtx.c" type="1"/>
+    <File name="stm_lib/user/usart_rxtx.c" path="stm_lib/user/usart_rxtx.c" type="1"/>
     <File name="stm_lib/user/usart_rxtx.h" path="stm_lib/user/usart_rxtx.h" type="1"/>
+    <File name="stm_lib/user/usart_servo.h" path="usart_servo.h" type="1"/>
     <File name="stm_lib/src/stm32f10x_gpio.c" path="stm_lib/src/stm32f10x_gpio.c" type="1"/>
     <File name="stm_lib/inc" path="" type="2"/>
+    <File name="stm_lib/user/gpio_led.c" path="stm_lib/user/gpio_led.c" type="1"/>
     <File name="stm_lib/inc/stm32f10x_gpio.h" path="stm_lib/inc/stm32f10x_gpio.h" type="1"/>
+    <File name="stm_lib/user/tim_pwm.h" path="stm_lib/user/tim_pwm.h" type="1"/>
     <File name="main.c" path="main.c" type="1"/>
     <File name="stm_lib/inc/stm32f10x_usart.h" path="stm_lib/inc/stm32f10x_usart.h" type="1"/>
   </Files>
