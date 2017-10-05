@@ -169,7 +169,8 @@ void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount) {
 	// Loop while there are more characters to send.
 	//
 	while (ulCount--) {
-		USART_SendData(USART1, *pucBuffer++); // Last Version USART_SendData(USART1,(uint16_t) *pucBuffer++);
+		USART_SendData(USART1, *pucBuffer); // Last Version USART_SendData(USART1,(uint16_t) *pucBuffer++);
+		++pucBuffer;
 		/* Loop until the end of transmission */
 		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {
 		}
