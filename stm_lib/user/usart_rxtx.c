@@ -47,29 +47,6 @@ void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount);
 /*            STM32F10x Peripherals Interrupt Handlers                        */
 /******************************************************************************/
 
-/**
-  * @brief  This function handles USARTx global interrupt request.
-  * @param  None
-  * @retval None
-  */
-void USART1_IRQHandler(void)
-{
-    if ((USART1->SR & USART_FLAG_RXNE) != (u16)RESET)	        
-	{		   
-			i = USART_ReceiveData(USART1);
-			if(j == NUM)
-			{
-                name[j] = i;
-			    j = 0;
-			}
-			else
-			{
-                name[j++] = i;
-			}
-			name[j] = '\0';
-	}	
-}
-
 /* Private functions ---------------------------------------------------------*/
 
 /*******************************************************************************

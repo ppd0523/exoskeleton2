@@ -9,6 +9,7 @@
 #include "tim_pwm.h"
 #include "tim_encoder.h"
 
+
 vu16 adcValue[4] = { };
 vu16 enc = 0;
 unsigned char buf[21] = {
@@ -46,17 +47,19 @@ void USART1_IRQHandler(void) {
 	}
 }
 
+
 void TIM2_IRQHandler(void) {
 	TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-	adc2str(buf, adcValue);
-	//GPIOA->ODR ^= GPIO_Pin_11;
+	static uint8_t cnt;
 	static vu16 enc0;
+//	adc2str(buf, adcValue);
+	GPIOA->ODR ^= GPIO_Pin_11;
 	enc0 = enc;
 	enc = TIM_GetCounter(TIM4);
 	//enc = TIM3->CNT;
-	int2str2(temp2, enc);
-	UARTSend(temp2, 6);
-	//GPIOA->ODR ^= GPIO_Pin_11;
+//	int2str2(temp2, enc);
+//	UARTSend(temp2, 6);
+	GPIOA->ODR ^= GPIO_Pin_11;
 }
 
 void TIM4_IRQHandler(void){
@@ -73,6 +76,7 @@ int main(void) {
 	adc_init();
 	pwm_init();
 	encoder_init();
+
 
 	while (1) {
 
