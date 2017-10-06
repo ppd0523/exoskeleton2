@@ -124,24 +124,25 @@ void USART3_IRQHandler(void) {
  */
 void TIM2_IRQHandler(void) {
 	TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-	static uint8_t cnt;
 	static vu16 enc0;
 //	adc2str(buf, adcValue);
-	GPIOA->ODR ^= GPIO_Pin_11;
+	GPIOA->ODR ^= GPIO_Pin_12;
 //	enc0 = enc;
-//	enc = TIM_GetCounter(TIM4);
-	//enc = TIM3->CNT;
-//	int2str2(temp2, enc);
-//	UARTSend(temp2, 6);
-	GPIOA->ODR ^= GPIO_Pin_11;
+	enc = TIM_GetCounter(TIM4);
+	//enc = TIM4->CNT;
+	int2str2(temp2, enc);
+	UARTSend(temp2, 6);
 }
 
-void TIM4_IRQHandler(void){
-	TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
-//	enc = TIM_GetCounter(TIM4);
-//	int d = (TIM4->CR1 & TIM_CR1_DIR) ? 1 : -1;
-//	enc += d;
-}
+//void TIM4_IRQHandler(void){
+//	if( TIM_ClearITPendingBit(TIM4, TIM_IT_Update) != RESET){
+//		TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
+////		enc = TIM_GetCounter(TIM4);
+//		int d = (TIM4->CR1 & TIM_CR1_DIR) ? 1 : -1;
+////		enc += d;
+//
+//	}
+//}
 
 int main(void) {
 	usart_init();
