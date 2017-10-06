@@ -42,7 +42,7 @@ void USART1_IRQHandler(void) {
 			GPIO_WriteBit(GPIOA,GPIO_Pin_12, Bit_SET);
 		}
 //		int2str2(temp, TIM3->CCR1);
-		int2str2(temp, enc);
+//		int2str2(temp, enc);
 		UARTSend(temp, 7);
 	}
 }
