@@ -177,18 +177,9 @@ void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount) {
 	}
 }
 
-void int2str(unsigned char buf[], uint16_t n) {
-	buf[0] = '0' + (n / 1000);
-	n %= 1000;
-	buf[1] = '0' + (n / 100);
-	n %= 100;
-	buf[2] = '0' + (n / 10);
-	n %= 10;
-	buf[3] = '0' + n;
-}
-
 void adc2str(unsigned char buf[], uint16_t adc[]) {
-	uint16_t n[4] = {adc[0], adc[1], adc[2], adc[3]};
+	uint16_t n[4];// = {adc[0], adc[1], adc[2], adc[3]};
+	memcpy(n, adc, 8);
 //	int2str(&buf[0],n[0]);
 //	int2str(&buf[5],n[1]);
 //	int2str(&buf[10],n[2]);
@@ -227,7 +218,17 @@ void adc2str(unsigned char buf[], uint16_t adc[]) {
 	buf[18] = '0' + n[3];
 }
 
-void int2str2(unsigned char* buf, uint16_t n){
+void int2str(unsigned char buf[], uint16_t n) {
+	buf[0] = '0' + (n / 1000);
+	n %= 1000;
+	buf[1] = '0' + (n / 100);
+	n %= 100;
+	buf[2] = '0' + (n / 10);
+	n %= 10;
+	buf[3] = '0' + n;
+}
+
+void int2str2(unsigned char buf[], uint16_t n){
 	buf[0] = '0' + (n / 10000);
 	n %= 10000;
 	buf[1] = '0' + (n / 1000);

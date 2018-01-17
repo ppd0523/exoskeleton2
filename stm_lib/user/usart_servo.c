@@ -111,13 +111,28 @@ void USART3Send(const unsigned char *pucBuffer, unsigned long ulCount) {
 	GPIO_ResetBits(GPIOA, GPIO_Pin_11); //DRIVER IN enable
 }
 
-#define DEBUG
+//#define DEBUG
 
 #define INST_WRITE 0x03
 #define INST_READ 0x02
 #define INST_ bREAD 0x92
 #define INST_ bWRITE 0x93
 #define RESERVE 0xAA
+
+u8 SetReturnLevel (u8 value){
+	u8 packet[] = { 0xFF, 0xFF, 0xFD, 0x00, 0x01/*ID*/, 0x06, 0x00, INST_WRITE, 0x7B, 0x03, value, 0, 0};	//13
+
+	u16 crc = Update_crc(packet, sizeof(packet)-2);
+	packet[11] = (char) crc & 0x00FF;
+	packet[12] = (char) (crc>>8) & 0x00FF;
+#ifdef DEBUG
+		UARTSend(packet, sizeof(packet));
+#endif
+	USART3Send(packet, sizeof(packet)); // packet size = 13
+
+	return 11;
+}
+
 
 u8 GetPosition(){
 	u8 packet[] =
