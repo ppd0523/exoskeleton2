@@ -132,7 +132,7 @@ void TIM2_IRQHandler(void) {
 
 	adc2str(&buf, adcValue);
 	enc = TIM_GetCounter(TIM4);
-//	int2str(&buf[20], enc);
+	int2str(&buf[20], enc);
 	UARTSend(buf, 25);
 }
 
