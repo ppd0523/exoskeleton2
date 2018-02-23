@@ -10,40 +10,29 @@
 #include "tim_encoder.h"
 
 
-u8 statusPacket[50] = { 0xAA, 0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA,0xAA};
+TxData gTxData = {{0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66}, };
+u8 statusPacket[50] = { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA,
+		0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
 u8 statusSize = 0;
-vu16 adcValue[4] = { };
-vu16 enc = 0;
 
-unsigned char buf[25] = {
-		0, 0, 0, 0, ',',
-		0, 0, 0, 0, ',',
-		0, 0, 0, 0, ',',
-		0, 0, 0, 0, ',',
-		0, 0, 0, 0, '\n' };
+vu16 adcValue[2] = {0x1122, 0x3344 };
 
-unsigned char temp[7] = { 0, 0, 0, 0, 0, '\r', '\n' };
 
 /**
  * receive from PC
  */
 void USART1_IRQHandler(void) {
-	static uint16_t index = 0;
-	static union{
-		u8 raw[4];
-		u32 angle;
-	} data;
-
 	if ((USART1->SR & USART_FLAG_RXNE) != (u16) RESET) {
-		data.raw[index++] = (char) 0xFF & USART_ReceiveData(USART1);
-		if(index >= 4){
-			SetPosition(data.angle);
-			index = 0;
-		}
-
-//		if ( c == 'a' ){
+		char c = (char) 0xFF & USART_ReceiveData(USART1);
+		USART_SendData(USART1, c);
+		if ( c == 'r' ){
 //			TIM3->CCR1 += 10;
-//		}
+			TIM_Cmd(TIM2, ENABLE);
+		}
+		if ( c == 'q' ){
+//			TIM3->CCR1 += 10;
+			TIM_Cmd(TIM2, DISABLE);
+		}
 //
 //		if (c == 's' ){
 //			TIM3->CCR1 -= 10;
@@ -98,7 +87,7 @@ void USART1_IRQHandler(void) {
 //			UARTSend(statusPacket, statusSize);
 //		}
 //		int2str2(temp, TIM3->CCR1);
-//		UARTSend(temp, 7);
+
 	}
 }
 
@@ -108,15 +97,8 @@ void USART1_IRQHandler(void) {
 void USART3_IRQHandler(void) {
 	static int index = 0;
 
-	if ((USART3->SR & USART_FLAG_RXNE) != (u16) RESET){
+	if ((USART3->SR & USART_FLAG_RXNE) != (u16) RESET) {
 		statusPacket[index++] = (char) 0xFF & USART_ReceiveData(USART3);
-
-//		int2str2(temp, TIM3->CCR1);
-//		int2str2(temp, enc);
-//		UARTSend(temp, 7);
-//
-//		int2str2(temp, TIM3->CCR1);
-//		UARTSend(temp, 7);
 
 	}
 
@@ -127,13 +109,15 @@ void USART3_IRQHandler(void) {
  */
 void TIM2_IRQHandler(void) {
 	TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-	static vu16 enc;
+
 	GPIOA->ODR ^= GPIO_Pin_12;
 
-	adc2str(&buf, adcValue);
-	enc = TIM_GetCounter(TIM4);
-//	int2str(&buf[20], enc);
-	UARTSend(buf, 25);
+//	memcpy((void*)gTxData.raw+2, (void*)adcValue, 4);
+//	gTxData.parse.enc = TIM_GetCounter(TIM4);
+
+	DMA_Cmd(DMA1_Channel4, DISABLE);
+	DMA_SetCurrDataCounter(DMA1_Channel4, 8);
+	DMA_Cmd(DMA1_Channel4, ENABLE);
 }
 
 int main(void) {
@@ -145,7 +129,6 @@ int main(void) {
 	adc_init();
 	pwm_init();
 	encoder_init();
-
 //	TorqueMode(1);
 //
 //	volatile int c = 0;
@@ -154,7 +137,6 @@ int main(void) {
 //			c = c + 1;
 //
 //	SetReturnLevel(1);
-
 
 	while (1) {
 

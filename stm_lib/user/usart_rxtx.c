@@ -23,12 +23,18 @@
 #include "stm32f10x_usart.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_gpio.h"
+#include "stm32f10x_dma.h"
 #include "misc.h"
 #include "usart_rxtx.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+#define BUFFER_SIZE 82
+#define USART1_ADDR ((unsigned int)0x40013804)
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+extern TxData gTxData;
+
+
 ErrorStatus HSEStartUpStatus;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,6 +67,7 @@ void usart_init(void) {
 	/* Enable USART1 and GPIOA clock */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA,
 			ENABLE);
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
 
 	/* NVIC Configuration */
 	NVIC_Configuration();
@@ -131,10 +138,26 @@ void USART_Configuration(void) {
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
 	USART_InitStructure.USART_HardwareFlowControl =
-			USART_HardwareFlowControl_None;
+			USART_DMAReq_Tx;
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 
 	USART_Init(USART1, &USART_InitStructure);
+
+	DMA_InitTypeDef DMA_InitStructure;
+	DMA_DeInit(DMA1_Channel4);
+	DMA_InitStructure.DMA_PeripheralBaseAddr = USART1_ADDR;
+	DMA_InitStructure.DMA_MemoryBaseAddr = gTxData.raw;
+	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
+	DMA_InitStructure.DMA_BufferSize = BUFFER_SIZE;
+	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_MemoryDataSize_Byte;
+	DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+	DMA_Init(DMA1_Channel4, &DMA_InitStructure);
+	DMA_Cmd(DMA1_Channel4, DISABLE);
+
 
 	/* Enable USART1 */
 	USART_Cmd(USART1, ENABLE);
@@ -208,14 +231,14 @@ void adc2str(unsigned char buf[], uint16_t adc[]) {
 	buf[12] = '0' + (n[2] / 10);
 	n[2] %= 10;
 	buf[13] = '0' + n[2];
-
-	buf[15] = '0' + (n[3] / 1000);
-	n[3] %= 1000;
-	buf[16] = '0' + (n[3] / 100);
-	n[3] %= 100;
-	buf[17] = '0' + (n[3] / 10);
-	n[3] %= 10;
-	buf[18] = '0' + n[3];
+//
+//	buf[15] = '0' + (n[3] / 1000);
+//	n[3] %= 1000;
+//	buf[16] = '0' + (n[3] / 100);
+//	n[3] %= 100;
+//	buf[17] = '0' + (n[3] / 10);
+//	n[3] %= 10;
+//	buf[18] = '0' + n[3];
 }
 
 void int2str(unsigned char buf[], uint16_t n) {

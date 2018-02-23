@@ -14,7 +14,7 @@ void adc_init() {
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_StructInit(&GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
 
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
@@ -28,7 +28,7 @@ void adc_init() {
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;
 	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) adcValue;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
-	DMA_InitStructure.DMA_BufferSize = 4;
+	DMA_InitStructure.DMA_BufferSize = 2;
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord; // 32bit
@@ -61,13 +61,13 @@ void adc_init() {
 	ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;
 	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_None;
 	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
-	ADC_InitStructure.ADC_NbrOfChannel = 4;
+	ADC_InitStructure.ADC_NbrOfChannel = 2;
 
 	ADC_Init(ADC1, &ADC_InitStructure);
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_0, 1, ADC_SampleTime_41Cycles5);
 	ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 2, ADC_SampleTime_41Cycles5);
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 3, ADC_SampleTime_41Cycles5);
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 4, ADC_SampleTime_41Cycles5);
+//	ADC_RegularChannelConfig(ADC1, ADC_Channel_2, 3, ADC_SampleTime_41Cycles5);
+//	ADC_RegularChannelConfig(ADC1, ADC_Channel_3, 4, ADC_SampleTime_41Cycles5);
 	ADC_Cmd(ADC1, ENABLE);
 	ADC_DMACmd(ADC1, ENABLE);
 	ADC_ResetCalibration(ADC1);
