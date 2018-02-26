@@ -6,7 +6,7 @@
 #include "misc.h"
 #include "adc-dma.h"
 
-extern vu16 adcValue[4];
+extern vu16 adcValue[2];
 
 void adc_init() {
 
@@ -14,7 +14,7 @@ void adc_init() {
 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	GPIO_StructInit(&GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
 
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
@@ -26,12 +26,12 @@ void adc_init() {
 	DMA_DeInit(DMA1_Channel1);
 
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&ADC1->DR;
-	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t) adcValue;
+	DMA_InitStructure.DMA_MemoryBaseAddr = (uint16_t) adcValue;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
 	DMA_InitStructure.DMA_BufferSize = 2;
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord; // 32bit
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord; // 16bit
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord; // 32bit. if 16bit data, set HalfWord
 	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
 	DMA_InitStructure.DMA_Priority = DMA_Priority_High;

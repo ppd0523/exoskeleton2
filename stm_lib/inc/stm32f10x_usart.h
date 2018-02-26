@@ -33,8 +33,8 @@ typedef union TxData_ {
 	unsigned char raw[8];
 	struct Parse {
 		// 8 bytes
-		unsigned char CR;
-		unsigned char LF;
+		unsigned char HEAD0;
+		unsigned char HEAD1;
 		unsigned short adc0;
 		unsigned short adc1;
 		unsigned short enc;

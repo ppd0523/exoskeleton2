@@ -10,7 +10,7 @@
 #include "tim_encoder.h"
 
 
-TxData gTxData = {{0xFF, 0xFF, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66}, };
+TxData gTxData = {};
 u8 statusPacket[50] = { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA,
 		0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
 u8 statusSize = 0;
@@ -24,69 +24,16 @@ vu16 adcValue[2] = {0x1122, 0x3344 };
 void USART1_IRQHandler(void) {
 	if ((USART1->SR & USART_FLAG_RXNE) != (u16) RESET) {
 		char c = (char) 0xFF & USART_ReceiveData(USART1);
-		USART_SendData(USART1, c);
+//		USART_SendData(USART1, c);
 		if ( c == 'r' ){
 //			TIM3->CCR1 += 10;
 			TIM_Cmd(TIM2, ENABLE);
 		}
-		if ( c == 'q' ){
+		else if ( c == 'q' ){
 //			TIM3->CCR1 += 10;
 			TIM_Cmd(TIM2, DISABLE);
 		}
-//
-//		if (c == 's' ){
-//			TIM3->CCR1 -= 10;
-//		}
-//
-//		if (c == 'd' ){
-//			TIM3->CCR1 = 0;
-//		}
-//
-//		if (c == '0' ){
-////			TIM3->CCR1 = 0;
-//			statusSize = ServoLED(0);
-//		}
-//		if (c == '9' ){
-//			statusSize = ServoLED(255);
-//		}
-//		vu16 v;
-//		if (c == '7' ){
-//			v += 10000;
-//			statusSize = SetPosition(v);
-//		}
-//		if (c == '8' ){
-//			v -= 10000;
-//			statusSize = SetPosition(v);
-//		}
-//		if (c == '6' ){
-//			v = 0;
-//			SetPosition(v);
-//		}
-//		if (c == '5' ){
-//			TorqueMode(1);
-//		}
-//		if (c == '4' ){
-//			TorqueMode(0);
-//		}
-//		if (c == '1' ){
-//			CheckError();
-//		}
-//		if (c == 'v' ){
-//			u32 v;
-//			statusSize = GetPosition(&v);
-//		}
-//		if (c == 's' ){
-//			u32 v=15000;
-//			statusSize = SetVelocity(v);
-//		}
-//		if (c == 'x' ){
-//			u32 v=1000;
-//			statusSize = SetVelocity(v);
-//		}
-//		if (c == 'p' ){
-//			UARTSend(statusPacket, statusSize);
-//		}
-//		int2str2(temp, TIM3->CCR1);
+
 
 	}
 }
@@ -121,6 +68,15 @@ void TIM2_IRQHandler(void) {
 }
 
 int main(void) {
+	gTxData.raw[0] = 0xFF;
+	gTxData.raw[1] = 0xFF;
+	gTxData.raw[2] = 0x22;
+	gTxData.raw[3] = 0x11;
+	gTxData.raw[4] = 0x44;
+	gTxData.raw[5] = 0x33;
+	gTxData.raw[6] = 0x66;
+	gTxData.raw[7] = 0x55;
+
 	usart_init();
 	timer_init();
 	usart_servo_init();

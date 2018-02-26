@@ -21,7 +21,7 @@ void timer_init(){
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
 	TIM_TimeBaseStructure.TIM_Period = 7200;
-	TIM_TimeBaseStructure.TIM_Prescaler = 490;//32000 8=4ms, 7200 49=10ms,
+	TIM_TimeBaseStructure.TIM_Prescaler = 39;//32000 8=4ms, 7200 49=10ms,
 //	TIM_TimeBaseStructure.TIM_Period = 2000;
 //	TIM_TimeBaseStructure.TIM_Prescaler = 36000;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;

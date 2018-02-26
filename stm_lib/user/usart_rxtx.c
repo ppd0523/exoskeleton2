@@ -28,7 +28,7 @@
 #include "usart_rxtx.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define BUFFER_SIZE 82
+#define BUFFER_SIZE 8
 #define USART1_ADDR ((unsigned int)0x40013804)
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -146,7 +146,7 @@ void USART_Configuration(void) {
 	DMA_InitTypeDef DMA_InitStructure;
 	DMA_DeInit(DMA1_Channel4);
 	DMA_InitStructure.DMA_PeripheralBaseAddr = USART1_ADDR;
-	DMA_InitStructure.DMA_MemoryBaseAddr = gTxData.raw;
+	DMA_InitStructure.DMA_MemoryBaseAddr = &gTxData;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
 	DMA_InitStructure.DMA_BufferSize = BUFFER_SIZE;
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
